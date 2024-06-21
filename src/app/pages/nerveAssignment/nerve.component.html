@@ -1,0 +1,175 @@
+
+<style>
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  background-color: #f4f4f8;
+  padding: 12px 10px;
+  border-radius: 15px;;
+}
+
+.button {
+  padding: 0;
+  width: 100px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+
+button.selected {
+  width: 100px;
+  background-color: #2850e7;
+  color: white;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dropdown{
+  margin-bottom: 10px;
+}
+select {
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+option {
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+option:selected {
+  width: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10px;
+  background-color: #f2f2f2;
+  color: #333;
+  margin-left: 10px;
+}
+
+.strategy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.strategy {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.strategy-name {
+  font-weight: bold;
+}
+
+.strategy-count {
+  color: gray;
+}
+
+.message {
+  text-align: center;
+  color: #666;
+}
+.strategy-count {
+  position: relative;
+}
+
+.strategy-count:before {
+  content: '•'; /* add bullet point character */
+  position: absolute;
+  left: -10px; /* adjust the position of the bullet point */
+  top: 0;
+}
+
+.card {
+  border: 0.1px solid #ffffff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.card-body {
+  padding: 20px;
+}
+</style>
+<div class="container">
+
+  
+<div >
+
+    <div class="button-group">
+      <button class="button" *ngFor="let item of strategyArray; let i = index"  [ngClass]="{'selected': selectedButtonIndex === i}" (click)="selectedView(item.View,i)">
+        <label>{{ item.View }}</label>
+
+      </button>
+
+     
+    </div>
+    <div class="dropdown">
+       <select class="select" (change)="updateStrategies($event)" [selectedIndex]="0">
+        <!-- <option value="25 Apr 2024">25 Apr 2024</option> -->
+        <option class="option" *ngFor="let date of dateArray" [value]="date">{{date |smallerdate}}</option>
+        <!-- Add more options here if needed -->
+      </select>
+    </div>
+    <div class="card card-dashed">
+
+        <div class="card-body">
+          <!-- Body content goes here -->
+          <ng-container *ngIf="filteredStrategies && filteredStrategies.length >= 1; then trueBlock else falseBlock"></ng-container>
+    
+      </div>
+     </div>
+    
+    <ng-template #trueBlock>
+      
+            <div class="strategy" *ngFor="let strategy of uniqueStrategyCounts | keyvalue">
+            <div class="strategy-name">{{ strategy.key }}</div>
+            <div class="strategy-count">
+              {{ strategy.value }}
+              <span>{{ strategy.value === 1 ? 'strategy' : 'strategies' }}</span>
+            </div>
+          </div>
+        
+      
+    </ng-template>
+    
+    <ng-template #falseBlock>
+        <div class="message">
+            There are no strategies for
+            <br>
+            {{this.selectedDate | smallerdate}}
+          </div>
+        
+    </ng-template>
+   
+    </div>
+  </div>
+  
